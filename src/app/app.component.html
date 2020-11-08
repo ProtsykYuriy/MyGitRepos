@@ -1,8 +1,3 @@
 <h1>My Git Repos</h1>
-<ag-grid-angular
-    style="width: 620px; height: 500px;"
-    class="ag-theme-alpine"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"
->
+<ag-grid-angular style="width: 620px; height: 500px;" class="ag-theme-alpine" [rowData]="rowDat$ | async" [columnDefs]="columnDefs">
 </ag-grid-angular>

@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import {GetReposService} from './services/get-repos.service';
+import { GetReposService, Repos } from './services/get-repos.service';
+
 
 @Component({
   selector: 'app-root',
@@ -8,24 +9,29 @@ import {GetReposService} from './services/get-repos.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'myGitRepos';  
-  constructor(public getReposService: GetReposService){
+  public columnDefs = [
+    { field: 'name', sortable: true, filter: true },
+    { field: 'language', sortable: true, filter: true },
+    { field: 'size', sortable: true, filter: true }
+  ];
+  public rowDat$: BehaviorSubject<any> = new BehaviorSubject<Repos>(null);
+
+  constructor(public getReposService: GetReposService) {
 
   }
-  ngOnInit(){
-    this.getReposService.fillTheTableWithRepos().subscribe();
-    this.getReposService.repos$.subscribe((repos)=>{
-      console.log(repos);
-      if(repos){
-        this.rowData = repos;
+  ngOnInit() {
+    const reposArr2 = [];
+    this.getReposService.getRepos().subscribe((data: Array<Repos>) => {
+      for (const item of data) {
+        reposArr2.push(
+          {
+            name: item.name,
+            language: item.language,
+            size: item.size
+          }
+        )
       }
+      this.rowDat$.next(reposArr2)
     })
   }
-
-  columnDefs = [
-      { field: 'name' },
-      { field: 'language' },
-      { field: 'size'}
-  ];
-  rowData = [];
 }
