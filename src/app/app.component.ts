@@ -14,24 +14,24 @@ export class AppComponent implements OnInit {
     { field: 'language', sortable: true, filter: true },
     { field: 'size', sortable: true, filter: true }
   ];
-  public rowDat$: BehaviorSubject<any> = new BehaviorSubject<Repos>(null);
+  public rowRepositoryData$: BehaviorSubject<any> = new BehaviorSubject<Repos>(null);
 
   constructor(public getReposService: GetReposService) {
 
   }
   ngOnInit() {
-    const reposArr2 = [];
-    this.getReposService.getRepos().subscribe((data: Array<Repos>) => {
-      for (const item of data) {
-        reposArr2.push(
+    this.getReposService.getRepos().subscribe((response: Array<Repos>) => {
+      const filteredReposArray = [];
+      for (const repository of response) {
+        filteredReposArray.push(
           {
-            name: item.name,
-            language: item.language,
-            size: item.size
+            name: repository.name,
+            language: repository.language,
+            size: repository.size
           }
         )
       }
-      this.rowDat$.next(reposArr2)
+      this.rowRepositoryData$.next(filteredReposArray)
     })
   }
 }
