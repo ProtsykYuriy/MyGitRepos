@@ -1,6 +1,6 @@
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import { GetReposService, Repos } from './services/get-repos.service';
+import { GetReposService, Repository } from './services/get-repos.service';
 
 
 @Component({
@@ -15,25 +15,12 @@ export class AppComponent implements OnInit {
     { field: 'size', sortable: true, filter: true },
     { field: 'star', sortable: true, filter: true }
   ];
-  public rowRepositoryData$: BehaviorSubject<any> = new BehaviorSubject<Repos>(null);
+  public rowRepositoryData$: Observable<Repository[]>;
 
   constructor(public getReposService: GetReposService) {
 
   }
   ngOnInit() {
-    this.getReposService.getRepos().subscribe((response: Array<any>) => {
-      const filteredReposArray: Array<Repos> = [];
-      for (const repository of response) {
-        filteredReposArray.push(
-          {
-            'name': repository.name,
-            'language': repository.language,
-            'size': repository.size,
-            'star': repository.stargazers_count,
-          }
-        )
-      }
-      this.rowRepositoryData$.next(filteredReposArray)
-    })
+    this.rowRepositoryData$ = this.getReposService.getRepos2();
   }
 }
