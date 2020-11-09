@@ -5,6 +5,7 @@ export interface Repos {
   name: string;
   language: string;
   size: number;
+  star: number;
 }
 
 @Injectable({

@@ -12,7 +12,8 @@ export class AppComponent implements OnInit {
   public columnDefs = [
     { field: 'name', sortable: true, filter: true },
     { field: 'language', sortable: true, filter: true },
-    { field: 'size', sortable: true, filter: true }
+    { field: 'size', sortable: true, filter: true },
+    { field: 'star', sortable: true, filter: true }
   ];
   public rowRepositoryData$: BehaviorSubject<any> = new BehaviorSubject<Repos>(null);
 
@@ -20,14 +21,15 @@ export class AppComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.getReposService.getRepos().subscribe((response: Array<Repos>) => {
-      const filteredReposArray = [];
+    this.getReposService.getRepos().subscribe((response: Array<any>) => {
+      const filteredReposArray: Array<Repos> = [];
       for (const repository of response) {
         filteredReposArray.push(
           {
-            name: repository.name,
-            language: repository.language,
-            size: repository.size
+            'name': repository.name,
+            'language': repository.language,
+            'size': repository.size,
+            'star': repository.stargazers_count,
           }
         )
       }
