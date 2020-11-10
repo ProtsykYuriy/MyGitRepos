@@ -9,6 +9,7 @@ import { GetReposService, Repository } from './services/get-repos.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  public title = 'My Git Repos';
   public columnDefs = [
     { field: 'name', sortable: true, filter: true },
     { field: 'language', sortable: true, filter: true },
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit {
   constructor(public getReposService: GetReposService) {
 
   }
-  ngOnInit() {
-    this.rowRepositoryData$ = this.getReposService.getRepos2();
+  ngOnInit(): void {
+    this.rowRepositoryData$ = this.getReposService.getRepos();
   }
 }

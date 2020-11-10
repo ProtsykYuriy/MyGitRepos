@@ -21,7 +21,7 @@ export class GetReposService {
 
   }
 
-  public getRepos2() {
+  public getRepos() {
     return this.http.get('https://api.github.com/users/ProtsykYuriy/repos').pipe(
       map((response: Repository[]) =>
         response.map((repo): Repository => repo = { 'name': repo.name, 'language': repo.language, 'size': repo.size, 'star': repo.stargazers_count }))
