@@ -6,8 +6,37 @@ import { GetReposService, Repository } from './get-repos.service';
 
 describe('GetReposService', () => {
   let service: GetReposService;
-  let httpClientSpy: { get: jasmine.Spy };
-  let expectedRepos: Repository[];
+  let httpClientSpy: { get: jasmine.Spy };  
+  let ReposIncome: Repository[] = 
+  [
+    {
+      name: 'Local server',
+      language: 'JavaScript',
+      size: 2390,
+      stargazers_count: 1,
+    },
+    {
+      name: 'Counter',
+      language: 'TypeScript',
+      size: 570,
+      stargazers_count: 0,
+    },
+  ];
+  let expectedReposOutput: Repository[] = 
+  [
+    {
+      name: 'Local server',
+      language: 'JavaScript',
+      size: 2390,
+      star: 1,
+    },
+    {
+      name: 'Counter',
+      language: 'TypeScript',
+      size: 570,
+      star: 0,
+    },
+  ];;
 
   beforeEach(() => {
     //TestBed.configureTestingModule({providers: [GetReposService]});
@@ -21,23 +50,11 @@ describe('GetReposService', () => {
     expect(service).toBeTruthy();
   });
 
-  xit('should return expected repos (HttpClient called once)', () => {
-    expectedRepos =
-    [
-      {
-        name: 'Local server',
-        language: 'JavaScript',
-        size: 2390,star: 1,
-      },
-      {
-        name: 'Counter',
-        language: 'TypeScript',
-        size: 570,
-      },
-    ];
-    httpClientSpy.get.and.returnValue(of(expectedRepos));
+  it('should return expected repos (HttpClient called once)', () => {
+    
+    httpClientSpy.get.and.returnValue(of(ReposIncome));
     service.getRepos().subscribe(
-      repos => expect(repos).toEqual(expectedRepos, 'expected repos'),
+      repos  => expect(repos).toEqual(expectedReposOutput, 'expected repos'),
       fail
     );
     expect(httpClientSpy.get.calls.count()).toBe(1, 'one call');
