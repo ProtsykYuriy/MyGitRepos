@@ -1,3 +1,21 @@
-<h1>{{title}}</h1>
-<ag-grid-angular #myGrid style="width: 820px; height: 500px;" class="ag-theme-alpine" [rowData]="rowRepositoryData$ | async" [columnDefs]="columnDefs" (gridReady)="onGridReady($event)">
+<h1>{{ title }}</h1>
+<ag-grid-angular
+  #myGrid
+  style="width: 820px; height: 500px"
+  class="ag-theme-alpine"
+  [rowData]="rowRepositoryData$ | async"
+  [columnDefs]="columnDefs"
+  (gridReady)="onGridReady($event)"
+>
 </ag-grid-angular>
+<ng-template #ErrorMessage *ngIf="errorObject.showErrorMsg">
+  <p class="error-notification">
+    Unfortunatelly can't get the information from server, the request failed
+    with status:
+    <span class="error-status">{{ errorObject.status }}</span
+    >, and message:
+    <span class="error-message">{{ errorObject.message }}</span>
+  </p>
+</ng-template>
+
+<!-- *ngIf="rowRepositoryData$ | async; else ErrorMessage" -->

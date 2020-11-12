@@ -1,16 +1,14 @@
-import { TestBed, inject, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { GetReposService, Repository } from './services/get-repos.service';
-import { EMPTY, of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { AgGridModule } from 'ag-grid-angular';
-import { GridOptions } from 'ag-grid-community';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  let getReposSpy: any;
+  let getReposSpy: jasmine.Spy;
   let testReposForTable: Repository[];
-  let gridOptions: GridOptions = <GridOptions>{};
   let service: GetReposService;
 
   beforeEach(async () => {
@@ -28,9 +26,7 @@ describe('AppComponent', () => {
         star: 0,
       },
     ];
-    const getReposService = jasmine.createSpyObj('GetReposService', [
-      'getRepos',
-    ]);
+    let getReposService = jasmine.createSpyObj('GetReposService', ['getRepos']);
     getReposSpy = getReposService.getRepos.and.returnValue(
       of(testReposForTable)
     );
@@ -55,12 +51,6 @@ describe('AppComponent', () => {
     expect(h1.textContent).toContain(component.title);
   });
 
-  it('should render title', () => {
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.textContent).toContain('My Git Repos');
-  });
-
   it('should call getReposSpy', () => {
     fixture.detectChanges();
     expect(getReposSpy).toHaveBeenCalled();
@@ -80,7 +70,7 @@ describe('AppComponent', () => {
     const grid = appElement.querySelector('ag-grid-angular');
     const headerElements = grid.querySelectorAll('.ag-header-cell-text');
     //expect(headerElements.length).toBe(3);
-    expect(headerElements[0].textContent).toEqual("Test Name");
+    expect(headerElements[0].textContent).toEqual('Test Name');
     // expect(cellElements[1].textContent).toEqual("42");
     // expect(cellElements[2].textContent).toEqual("84");
   });
