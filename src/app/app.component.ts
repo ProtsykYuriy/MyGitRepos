@@ -1,7 +1,8 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { GetReposService, Repository } from './services/get-repos.service';
 import { GridApi, GridOptions } from 'ag-grid-community';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,7 @@ export class AppComponent implements OnInit {
 
   constructor(public getReposService: GetReposService) {}
 
-  ngOnInit(): void {
+  ngOnInit(){
     this.rowRepositoryData$ = this.getReposService.getRepos();
   }
 
