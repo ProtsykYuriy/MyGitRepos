@@ -1,6 +1,7 @@
 <h1>{{ title }}</h1>
 <ag-grid-angular
   #myGrid
+  *ngIf="!errorObject.showErrorMsg; else ErrorMessage"
   style="width: 820px; height: 500px"
   class="ag-theme-alpine"
   [rowData]="rowRepositoryData$ | async"
@@ -8,7 +9,7 @@
   (gridReady)="onGridReady($event)"
 >
 </ag-grid-angular>
-<ng-template #ErrorMessage *ngIf="errorObject.showErrorMsg">
+<ng-template #ErrorMessage >
   <p class="error-notification">
     Unfortunatelly can't get the information from server, the request failed
     with status:
