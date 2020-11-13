@@ -1,14 +1,16 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { GetReposService, Repository } from './services/get-repos.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { AgGridModule } from 'ag-grid-angular';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let getReposSpy: jasmine.Spy;
   let testReposForTable: Repository[];
+  let getReposService:any;
   let service: GetReposService;
 
   beforeEach(async () => {
@@ -26,7 +28,7 @@ describe('AppComponent', () => {
         star: 0,
       },
     ];
-    let getReposService = jasmine.createSpyObj('GetReposService', ['getRepos']);
+    getReposService = jasmine.createSpyObj('GetReposService', ['getRepos']);
     getReposSpy = getReposService.getRepos.and.returnValue(
       of(testReposForTable)
     );
@@ -72,6 +74,18 @@ describe('AppComponent', () => {
     //expect(headerElements.length).toBe(3);
     expect(headerElements[0].textContent).toEqual('Test Name');
     // expect(cellElements[1].textContent).toEqual("42");
-    // expect(cellElements[2].textContent).toEqual("84");
+  });
+
+  it('should set Error message when getRepos() is errored out', () => {
+    fixture.detectChanges();
+    const errorResponse = new HttpErrorResponse({
+          error: 'test 404 error',
+          status: 404, statusText: 'Not Found'
+        });
+    expect(component.errorObject.showErrorMsg).toBeFalse();
+    getReposSpy = getReposService.getRepos.and.returnValue(
+      of(errorResponse))
+    expect(getReposSpy).toHaveBeenCalled();
+    expect(component.errorObject.showErrorMsg).toBeTrue();
   });
 });

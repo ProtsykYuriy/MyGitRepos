@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   public title = 'My Git Repos';
-  public gridOptions: GridOptions;
+  public gridOptions: GridOptions ;
   public columnDefs = [
     { field: 'name', sortable: true, filter: true },
     { field: 'language', sortable: true, filter: true },
@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
         this.errorObject.showErrorMsg = true;
         this.errorObject.status = err.status;
         this.errorObject.message = err.statusText;
+        console.log('error', err);
         return throwError(err);
       })
     );
@@ -37,5 +38,6 @@ export class AppComponent implements OnInit {
   onGridReady(gridOptionsIncome) {
     console.log(gridOptionsIncome);
     this.gridOptions = gridOptionsIncome;
+    console.log(this.gridOptions);
   }
 }
