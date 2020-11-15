@@ -8,9 +8,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  let getReposSpy: jasmine.Spy;
+  //let getReposSpy: jasmine.Spy;
   let testReposForTable: Repository[];
-  let getReposService:any;
+  let getReposService: any;
   let service: GetReposService;
 
   beforeEach(async () => {
@@ -29,9 +29,11 @@ describe('AppComponent', () => {
       },
     ];
     getReposService = jasmine.createSpyObj('GetReposService', ['getRepos']);
-    getReposSpy = getReposService.getRepos.and.returnValue(
-      of(testReposForTable)
-    );
+    getReposService.getRepos.and.returnValue(
+      of(testReposForTable));
+    // getReposSpy = getReposService.getRepos.and.returnValue(
+    //   of(testReposForTable)
+    // );
 
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
@@ -41,6 +43,7 @@ describe('AppComponent', () => {
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges()
   });
 
   it('should create the app', () => {
@@ -55,7 +58,7 @@ describe('AppComponent', () => {
 
   it('should call getReposSpy', () => {
     fixture.detectChanges();
-    expect(getReposSpy).toHaveBeenCalled();
+    expect(getReposService.getRepos).toHaveBeenCalled();
   });
 
   xit('grid API is not available until  `detectChanges`', () => {
@@ -77,15 +80,14 @@ describe('AppComponent', () => {
   });
 
   it('should set Error message when getRepos() is errored out', () => {
-    fixture.detectChanges();
     const errorResponse = new HttpErrorResponse({
-          error: 'test 404 error',
-          status: 404, statusText: 'Not Found'
-        });
+      error: 'test 404 error',
+      status: 404,
+      statusText: 'Not Found',
+    });
+    getReposService.getRepos.and.throwError('err');
     expect(component.errorObject.showErrorMsg).toBeFalse();
-    getReposSpy = getReposService.getRepos.and.returnValue(
-      of(errorResponse))
-    expect(getReposSpy).toHaveBeenCalled();
+    expect(getReposService.getRepos).toHaveBeenCalled();
     expect(component.errorObject.showErrorMsg).toBeTrue();
   });
 });
