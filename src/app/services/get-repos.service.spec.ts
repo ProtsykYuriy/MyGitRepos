@@ -5,11 +5,12 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('GetReposService', () => {
   let httpTestingController: HttpTestingController;
-  let getRepoServiceSpy: GetReposService;
   let getRepoService: GetReposService;
+  let getRepoServiceSpy: GetReposService;
   let httpClientSpy: { get: jasmine.Spy };
   let ReposIncome: Repository[] = [
     {
@@ -76,6 +77,22 @@ describe('GetReposService', () => {
     );
     expect(req.request.method).toBe('GET');
     req.flush(ReposIncome);
+  });
+
+  it('can test HttpClient.get wit error response', () => {
+    const message = 'Session expired';
+    getRepoService.getRepos().subscribe(
+      (response) => fail('should fail with the 401 error'),
+      (err: HttpErrorResponse) => {
+        expect(err.status).toBe(401, 'status');
+        expect(err.error).toBe(message, 'message');
+      }
+    );
+    const req = httpTestingController.expectOne(
+      'https://api.github.com/users/ProtsykYuriy/repos'
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush(message, { status: 401, statusText: 'Unauthorized' });
   });
 
   // it('should return an error when the server returns a 404', () => {
