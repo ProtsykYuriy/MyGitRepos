@@ -79,7 +79,7 @@ describe('AppComponent', () => {
     // expect(cellElements[1].textContent).toEqual("42");
   });
 
-  it('should set Error message when getRepos() is errored out', () => {
+  xit('should set Error message when getRepos() is errored out', () => {
     const errorResponse = new HttpErrorResponse({
       error: 'test 404 error',
       status: 404,
