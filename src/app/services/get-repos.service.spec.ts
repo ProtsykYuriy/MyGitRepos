@@ -46,8 +46,8 @@ describe('GetReposService', () => {
       imports: [HttpClientTestingModule],
       providers: [GetReposService],
     });
-    getRepoService = TestBed.get(GetReposService);
-    httpTestingController = TestBed.get(HttpTestingController);
+    getRepoService = TestBed.inject(GetReposService);
+    httpTestingController = TestBed.inject(HttpTestingController);
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
     getRepoServiceSpy = new GetReposService(httpClientSpy as any);
   });
